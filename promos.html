@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promotions - Mont Blanc Discothèque</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="assets/logo.png" type="image/png">
+</head>
+<body>
+    <!-- Fond animé spectaculaire -->
+    <div class="bg-container">
+        <div class="bg-gradient-animate"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="noise-overlay"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Mont Blanc Logo">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link">Accueil</a></li>
+                <li><a href="events.html" class="nav-link">Événements</a></li>
+                <li><a href="articles.html" class="nav-link">Articles</a></li>
+                <li><a href="promos.html" class="nav-link active">Promos</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header page-header-promo">
+        <div class="page-header-content">
+            <span class="page-tag">Offres</span>
+            <h1 class="page-title">Promotions</h1>
+            <p class="page-subtitle">Profitez de nos offres exclusives</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Admin Panel -->
+            <div class="admin-section glass-card">
+                <button class="admin-toggle" id="promoAdminToggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    <span>Ajouter une promotion</span>
+                </button>
+                <form class="admin-form" id="promoForm">
+                    <div class="form-group">
+                        <label>Titre de la promotion</label>
+                        <input type="text" id="promoTitle" placeholder="Ex: Happy Hour" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="promoDescription" placeholder="Décrivez l'offre..." required></textarea>
+                    </div>
+                    <div class="form-row two-cols">
+                        <div class="form-group">
+                            <label>Code promo (optionnel)</label>
+                            <input type="text" id="promoCode" placeholder="Ex: PROMO50">
+                        </div>
+                        <div class="form-group">
+                            <label>Date d'expiration</label>
+                            <input type="date" id="promoExpiry">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Publier la promotion</button>
+                </form>
+            </div>
+
+            <!-- Promo Banners -->
+            <div class="promo-banners" id="promoBanners">
+                <!-- Will be populated by JS -->
+            </div>
+
+            <!-- Promos Grid -->
+            <div class="promos-grid" id="promosGrid">
+                <!-- Promos will be loaded by JS -->
+            </div>
+
+            <!-- Partners Section -->
+            <section class="partners-section">
+                <h2 class="section-title-sm">Nos Partenaires</h2>
+                <div class="partners-grid">
+                    <div class="partner-card glass-card">
+                        <div class="partner-logo">🍸</div>
+                        <h3>Premium Spirits</h3>
+                        <p>Partenaire officiel boissons</p>
+                    </div>
+                    <div class="partner-card glass-card">
+                        <div class="partner-logo">🎧</div>
+                        <h3>Sound Factory</h3>
+                        <p>Équipement audio</p>
+                    </div>
+                    <div class="partner-card glass-card">
+                        <div class="partner-logo">🚕</div>
+                        <h3>Safe Ride</h3>
+                        <p>Transport partenaire</p>
+                    </div>
+                    <div class="partner-card glass-card">
+                        <div class="partner-logo">📸</div>
+                        <h3>Night Shots</h3>
+                        <p>Photographe officiel</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="Mont Blanc">
+                <p>L'expérience nightlife d'exception au cœur des Alpes</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Navigation</h4>
+                    <a href="index.html">Accueil</a>
+                    <a href="events.html">Événements</a>
+                    <a href="articles.html">Articles</a>
+                    <a href="promos.html">Promotions</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <p>123 Avenue des Alpes</p>
+                    <p>74000 Annecy</p>
+                    <p>+33 4 50 XX XX XX</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Horaires</h4>
+                    <p>Jeudi: 23h - 04h</p>
+                    <p>Vendredi: 23h - 05h</p>
+                    <p>Samedi: 23h - 06h</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Mont Blanc Discothèque. Tous droits réservés.</p>
+            <div class="footer-social">
+                <a href="#" class="social-icon">FB</a>
+                <a href="#" class="social-icon">IG</a>
+                <a href="#" class="social-icon">TK</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>

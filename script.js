@@ -1,41 +1,179 @@
 // ====================================
-// LE MONT BLANC - DISCOTHÈQUE
-// JavaScript Interactif
+// MONT BLANC DISCOTHÈQUE
+// JavaScript - Multi-pages
 // ====================================
 
-// ====================================
-// INITIALISATION
-// ====================================
 document.addEventListener('DOMContentLoaded', () => {
-    initParticles();
+    initCustomCursor();
+    initHeroParticles();
+    initCounterAnimation();
     initNavigation();
     initAdminPanels();
     initForms();
     initModal();
-    initScrollAnimations();
-    loadContent();
+    initFilters();
     initContactForm();
+    loadContent();
 });
 
 // ====================================
-// PARTICULES ANIMÉES
+// CUSTOM CURSOR
 // ====================================
-function initParticles() {
-    const particlesContainer = document.getElementById('particles');
+function initCustomCursor() {
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+
+    if (!cursor || !cursorDot) return;
+
+    // Check if device has touch (mobile)
+    if ('ontouchstart' in window) {
+        cursor.style.display = 'none';
+        cursorDot.style.display = 'none';
+        return;
+    }
+
+    let mouseX = 0, mouseY = 0;
+    let cursorX = 0, cursorY = 0;
+
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        // Dot follows immediately
+        cursorDot.style.left = mouseX + 'px';
+        cursorDot.style.top = mouseY + 'px';
+    });
+
+    // Smooth cursor follow
+    function animateCursor() {
+        cursorX += (mouseX - cursorX) * 0.15;
+        cursorY += (mouseY - cursorY) * 0.15;
+
+        cursor.style.left = cursorX + 'px';
+        cursor.style.top = cursorY + 'px';
+
+        requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    // Hover effects on interactive elements
+    const hoverElements = document.querySelectorAll('a, button, .btn, .event-card, .article-card, .promo-card, .glass-card, input, textarea, select');
+
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+        });
+    });
+
+    // Hide cursor when leaving window
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+        cursorDot.style.opacity = '0';
+    });
+
+    document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1';
+        cursorDot.style.opacity = '1';
+    });
+}
+
+// ====================================
+// HERO PARTICLES
+// ====================================
+function initHeroParticles() {
+    const container = document.getElementById('particlesHero');
+    if (!container) return;
+
     const particleCount = 50;
-    const colors = ['#00f0ff', '#ff00ff', '#ffff00', '#ff6b6b', '#00ff88'];
+    // Mont Blanc theme - white and ice blue particles
+    const colors = ['#ffffff', '#f0f5ff', '#e8f4ff', '#a8c8e8', '#c0c0c0'];
 
     for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 15 + 's';
-        particle.style.animationDuration = (10 + Math.random() * 20) + 's';
-        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
-        particle.style.width = (2 + Math.random() * 4) + 'px';
-        particle.style.height = particle.style.width;
-        particlesContainer.appendChild(particle);
+        createParticle(container, colors);
     }
+}
+
+function createParticle(container, colors) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+
+    const size = Math.random() * 4 + 2;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const left = Math.random() * 100;
+    const delay = Math.random() * 10;
+    const duration = Math.random() * 10 + 10;
+
+    particle.style.cssText = `
+        width: ${size}px;
+        height: ${size}px;
+        background: ${color};
+        left: ${left}%;
+        animation-delay: ${delay}s;
+        animation-duration: ${duration}s;
+        box-shadow: 0 0 ${size * 2}px ${color};
+    `;
+
+    container.appendChild(particle);
+}
+
+// ====================================
+// COUNTER ANIMATION
+// ====================================
+function initCounterAnimation() {
+    const counters = document.querySelectorAll('.stat-number[data-count]');
+    if (counters.length === 0) return;
+
+    const observerOptions = {
+        threshold: 0.5,
+        rootMargin: '0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounter(entry.target);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    counters.forEach(counter => observer.observe(counter));
+}
+
+function animateCounter(element) {
+    const target = parseInt(element.dataset.count);
+    const duration = 2000;
+    const start = performance.now();
+
+    function update(currentTime) {
+        const elapsed = currentTime - start;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const current = Math.floor(easeOutQuart * target);
+
+        // Format number with spaces for thousands
+        element.textContent = formatNumber(current);
+
+        if (progress < 1) {
+            requestAnimationFrame(update);
+        } else {
+            element.textContent = formatNumber(target);
+        }
+    }
+
+    requestAnimationFrame(update);
+}
+
+function formatNumber(num) {
+    if (num >= 1000) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
+    return num.toString();
 }
 
 // ====================================
@@ -44,116 +182,71 @@ function initParticles() {
 function initNavigation() {
     const navbar = document.querySelector('.navbar');
     const menuToggle = document.getElementById('menuToggle');
-    const navLinks = document.querySelector('.nav-links');
-    const navLinksItems = document.querySelectorAll('.nav-link');
+    const navLinks = document.getElementById('navLinks');
 
     // Scroll effect
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            navbar.classList.add('scrolled');
+        if (window.scrollY > 50) {
+            navbar?.classList.add('scrolled');
         } else {
-            navbar.classList.remove('scrolled');
+            navbar?.classList.remove('scrolled');
         }
-
-        // Update active link based on scroll position
-        updateActiveNavLink();
     });
 
-    // Mobile menu toggle
-    menuToggle.addEventListener('click', () => {
+    // Mobile menu
+    menuToggle?.addEventListener('click', () => {
         menuToggle.classList.toggle('active');
-        navLinks.classList.toggle('active');
+        navLinks?.classList.toggle('active');
     });
 
-    // Close mobile menu when clicking a link
-    navLinksItems.forEach(link => {
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
-            menuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
+            menuToggle?.classList.remove('active');
+            navLinks?.classList.remove('active');
         });
-    });
-
-    // Smooth scroll for navigation links
-    navLinksItems.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth' });
-            }
-        });
-    });
-}
-
-function updateActiveNavLink() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    let currentSection = '';
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 200;
-        if (window.scrollY >= sectionTop) {
-            currentSection = section.getAttribute('id');
-        }
-    });
-
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${currentSection}`) {
-            link.classList.add('active');
-        }
     });
 }
 
 // ====================================
-// PANNEAUX D'ADMINISTRATION
+// ADMIN PANELS
 // ====================================
 function initAdminPanels() {
-    // Event Admin Panel
-    const adminToggle = document.getElementById('adminToggle');
-    const adminPanel = document.getElementById('adminPanel');
+    const toggles = [
+        { toggle: 'eventAdminToggle', panel: document.getElementById('eventAdminToggle')?.closest('.admin-section') },
+        { toggle: 'articleAdminToggle', panel: document.getElementById('articleAdminToggle')?.closest('.admin-section') },
+        { toggle: 'promoAdminToggle', panel: document.getElementById('promoAdminToggle')?.closest('.admin-section') }
+    ];
 
-    adminToggle.addEventListener('click', () => {
-        adminPanel.classList.toggle('open');
-    });
-
-    // Article Admin Panel
-    const articleAdminToggle = document.getElementById('articleAdminToggle');
-    const articleAdminPanel = document.getElementById('articleAdminPanel');
-
-    articleAdminToggle.addEventListener('click', () => {
-        articleAdminPanel.classList.toggle('open');
-    });
-
-    // Promo Admin Panel
-    const promoAdminToggle = document.getElementById('promoAdminToggle');
-    const promoAdminPanel = document.getElementById('promoAdminPanel');
-
-    promoAdminToggle.addEventListener('click', () => {
-        promoAdminPanel.classList.toggle('open');
+    toggles.forEach(({ toggle, panel }) => {
+        const btn = document.getElementById(toggle);
+        if (btn && panel) {
+            btn.addEventListener('click', () => {
+                panel.classList.toggle('open');
+            });
+        }
     });
 }
 
 // ====================================
-// GESTION DES FORMULAIRES
+// FORMULAIRES
 // ====================================
 function initForms() {
     // Event Form
     const eventForm = document.getElementById('eventForm');
-    eventForm.addEventListener('submit', handleEventSubmit);
+    eventForm?.addEventListener('submit', handleEventSubmit);
 
     // Article Form
     const articleForm = document.getElementById('articleForm');
-    articleForm.addEventListener('submit', handleArticleSubmit);
+    articleForm?.addEventListener('submit', handleArticleSubmit);
 
     // Promo Form
     const promoForm = document.getElementById('promoForm');
-    promoForm.addEventListener('submit', handlePromoSubmit);
+    promoForm?.addEventListener('submit', handlePromoSubmit);
 }
 
 // ====================================
-// GESTION DES ÉVÉNEMENTS
+// ÉVÉNEMENTS
 // ====================================
 function handleEventSubmit(e) {
     e.preventDefault();
@@ -169,66 +262,99 @@ function handleEventSubmit(e) {
         createdAt: new Date().toISOString()
     };
 
-    // Save to localStorage
     const events = getEvents();
     events.unshift(event);
     localStorage.setItem('montblanc_events', JSON.stringify(events));
 
-    // Reset form and close panel
     e.target.reset();
-    document.getElementById('adminPanel').classList.remove('open');
+    document.getElementById('eventAdminToggle')?.closest('.admin-section')?.classList.remove('open');
 
-    // Refresh display
     renderEvents();
     showToast('Événement publié avec succès !', 'success');
 }
 
 function getEvents() {
-    const events = localStorage.getItem('montblanc_events');
-    return events ? JSON.parse(events) : [];
+    return JSON.parse(localStorage.getItem('montblanc_events') || '[]');
 }
 
 function deleteEvent(id) {
-    const events = getEvents().filter(event => event.id !== id);
+    const events = getEvents().filter(e => e.id !== id);
     localStorage.setItem('montblanc_events', JSON.stringify(events));
     renderEvents();
     showToast('Événement supprimé', 'success');
 }
 
 function renderEvents() {
-    const eventsGrid = document.getElementById('eventsGrid');
+    const eventsPreview = document.getElementById('eventsPreview');
+    const eventsList = document.getElementById('eventsList');
+    const featuredEvent = document.getElementById('featuredEvent');
     const events = getEvents();
 
-    if (events.length === 0) {
-        eventsGrid.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="empty-state-icon">🎉</div>
-                <p class="empty-state-text">Aucune soirée programmée</p>
-                <p class="empty-state-subtext">Publiez votre première annonce ci-dessus</p>
-            </div>
-        `;
-        return;
+    // Preview (index page) - max 3
+    if (eventsPreview) {
+        if (events.length === 0) {
+            eventsPreview.innerHTML = createEmptyState('calendar', 'Aucun événement', 'Les prochaines soirées apparaîtront ici');
+        } else {
+            eventsPreview.innerHTML = events.slice(0, 3).map(e => createEventCard(e)).join('');
+        }
     }
 
-    eventsGrid.innerHTML = events.map((event, index) => `
-        <div class="event-card" style="animation-delay: ${index * 0.1}s">
-            <div class="event-header">
-                <span class="event-date">${formatDate(event.date)} à ${event.time}</span>
+    // Full list (events page)
+    if (eventsList) {
+        if (events.length === 0) {
+            eventsList.innerHTML = createEmptyState('calendar', 'Aucun événement programmé', 'Publiez votre première soirée ci-dessus');
+        } else {
+            eventsList.innerHTML = events.map(e => createEventCard(e, true)).join('');
+        }
+    }
+
+    // Featured event
+    if (featuredEvent && events.length > 0) {
+        const featured = events[0];
+        featuredEvent.innerHTML = `
+            <div class="featured-card">
+                <div class="featured-info">
+                    <span class="featured-badge">À venir</span>
+                    <h2 class="featured-title">${escapeHtml(featured.title)}</h2>
+                    <p class="featured-description">${escapeHtml(featured.description)}</p>
+                    <div class="event-meta">
+                        <div class="event-meta-item">📅 ${formatDate(featured.date)}</div>
+                        <div class="event-meta-item">🕐 ${featured.time}</div>
+                        ${featured.dj ? `<div class="event-meta-item">🎧 ${escapeHtml(featured.dj)}</div>` : ''}
+                        ${featured.price ? `<div class="event-meta-item">💰 ${escapeHtml(featured.price)}</div>` : ''}
+                    </div>
+                    <button class="btn btn-primary" onclick="showEventDetails(${featured.id})">Plus d'infos</button>
+                </div>
+                <div class="featured-image">
+                    <span>🎉</span>
+                </div>
+            </div>
+        `;
+    } else if (featuredEvent) {
+        featuredEvent.innerHTML = '';
+    }
+}
+
+function createEventCard(event, showDelete = false) {
+    return `
+        <div class="event-card">
+            <div class="event-card-header">
+                <span class="event-date-badge">📅 ${formatDateShort(event.date)} • ${event.time}</span>
                 <h3 class="event-title">${escapeHtml(event.title)}</h3>
             </div>
-            <div class="event-body">
-                <p class="event-description">${escapeHtml(event.description)}</p>
+            <div class="event-card-body">
+                <p class="event-description">${escapeHtml(truncate(event.description, 120))}</p>
                 <div class="event-meta">
-                    ${event.dj ? `<div class="event-meta-item"><span>🎧</span><span>${escapeHtml(event.dj)}</span></div>` : ''}
-                    ${event.price ? `<div class="event-meta-item"><span>💰</span><span>${escapeHtml(event.price)}</span></div>` : ''}
+                    ${event.dj ? `<span class="event-meta-item">🎧 ${escapeHtml(event.dj)}</span>` : ''}
+                    ${event.price ? `<span class="event-meta-item">💰 ${escapeHtml(event.price)}</span>` : ''}
                 </div>
                 <div class="event-actions">
-                    <button class="event-btn event-btn-primary" onclick="showEventDetails(${event.id})">Plus d'infos</button>
-                    <button class="event-btn event-btn-delete" onclick="deleteEvent(${event.id})">Supprimer</button>
+                    <button class="event-btn event-btn-primary" onclick="showEventDetails(${event.id})">Détails</button>
+                    ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteEvent(${event.id})">Supprimer</button>` : ''}
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
 }
 
 function showEventDetails(id) {
@@ -236,23 +362,25 @@ function showEventDetails(id) {
     if (!event) return;
 
     const modalBody = document.getElementById('modalBody');
+    if (!modalBody) return;
+
     modalBody.innerHTML = `
-        <div class="event-header" style="margin-bottom: 2rem;">
-            <span class="event-date">${formatDate(event.date)} à ${event.time}</span>
-            <h2 class="event-title" style="font-size: 2rem;">${escapeHtml(event.title)}</h2>
+        <span class="featured-badge" style="margin-bottom: 1rem; display: inline-block;">Événement</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem;">${escapeHtml(event.title)}</h2>
+        <div class="event-meta" style="margin-bottom: 1.5rem;">
+            <div class="event-meta-item">📅 ${formatDate(event.date)}</div>
+            <div class="event-meta-item">🕐 ${event.time}</div>
+            ${event.dj ? `<div class="event-meta-item">🎧 ${escapeHtml(event.dj)}</div>` : ''}
+            ${event.price ? `<div class="event-meta-item">💰 ${escapeHtml(event.price)}</div>` : ''}
         </div>
-        <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 2rem;">${escapeHtml(event.description)}</p>
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;">
-            ${event.dj ? `<div class="contact-card"><div class="contact-icon">🎧</div><h3>DJ / Artiste</h3><p>${escapeHtml(event.dj)}</p></div>` : ''}
-            ${event.price ? `<div class="contact-card"><div class="contact-icon">💰</div><h3>Entrée</h3><p>${escapeHtml(event.price)}</p></div>` : ''}
-        </div>
+        <p style="color: var(--text-secondary); line-height: 1.8;">${escapeHtml(event.description)}</p>
     `;
 
     openModal();
 }
 
 // ====================================
-// GESTION DES ARTICLES
+// ARTICLES
 // ====================================
 function handleArticleSubmit(e) {
     e.preventDefault();
@@ -262,70 +390,106 @@ function handleArticleSubmit(e) {
         title: document.getElementById('articleTitle').value,
         category: document.getElementById('articleCategory').value,
         content: document.getElementById('articleContent').value,
-        author: document.getElementById('articleAuthor').value || 'Le Mont Blanc',
+        author: document.getElementById('articleAuthor').value || 'Mont Blanc',
         createdAt: new Date().toISOString()
     };
 
-    // Save to localStorage
     const articles = getArticles();
     articles.unshift(article);
     localStorage.setItem('montblanc_articles', JSON.stringify(articles));
 
-    // Reset form and close panel
     e.target.reset();
-    document.getElementById('articleAdminPanel').classList.remove('open');
+    document.getElementById('articleAdminToggle')?.closest('.admin-section')?.classList.remove('open');
 
-    // Refresh display
     renderArticles();
     showToast('Article publié avec succès !', 'success');
 }
 
 function getArticles() {
-    const articles = localStorage.getItem('montblanc_articles');
-    return articles ? JSON.parse(articles) : [];
+    return JSON.parse(localStorage.getItem('montblanc_articles') || '[]');
 }
 
 function deleteArticle(id) {
-    const articles = getArticles().filter(article => article.id !== id);
+    const articles = getArticles().filter(a => a.id !== id);
     localStorage.setItem('montblanc_articles', JSON.stringify(articles));
     renderArticles();
     showToast('Article supprimé', 'success');
 }
 
-function renderArticles() {
-    const articlesGrid = document.getElementById('articlesGrid');
-    const articles = getArticles();
+function renderArticles(filter = 'all') {
+    const articlesPreview = document.getElementById('articlesPreview');
+    const articlesList = document.getElementById('articlesList');
+    const featuredArticle = document.getElementById('featuredArticle');
+    let articles = getArticles();
 
-    if (articles.length === 0) {
-        articlesGrid.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="empty-state-icon">📰</div>
-                <p class="empty-state-text">Aucun article publié</p>
-                <p class="empty-state-subtext">Partagez vos actualités avec vos visiteurs</p>
-            </div>
-        `;
-        return;
+    if (filter !== 'all') {
+        articles = articles.filter(a => a.category === filter);
     }
 
-    articlesGrid.innerHTML = articles.map((article, index) => `
-        <div class="article-card" style="animation-delay: ${index * 0.1}s">
-            <div class="article-header">
+    // Preview (index page) - max 3
+    if (articlesPreview) {
+        const allArticles = getArticles();
+        if (allArticles.length === 0) {
+            articlesPreview.innerHTML = createEmptyState('newspaper', 'Aucun article', 'Les actualités apparaîtront ici');
+        } else {
+            articlesPreview.innerHTML = allArticles.slice(0, 3).map(a => createArticleCard(a)).join('');
+        }
+    }
+
+    // Full list (articles page)
+    if (articlesList) {
+        if (articles.length === 0) {
+            articlesList.innerHTML = createEmptyState('newspaper', 'Aucun article', 'Publiez votre premier article ci-dessus');
+        } else {
+            articlesList.innerHTML = articles.map(a => createArticleCard(a, true)).join('');
+        }
+    }
+
+    // Featured article
+    if (featuredArticle && articles.length > 0) {
+        const featured = articles[0];
+        featuredArticle.innerHTML = `
+            <div class="featured-card">
+                <div class="featured-info">
+                    <span class="article-category ${featured.category}">${getCategoryLabel(featured.category)}</span>
+                    <h2 class="featured-title">${escapeHtml(featured.title)}</h2>
+                    <p class="featured-description">${escapeHtml(truncate(featured.content, 200))}</p>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
+                        Par ${escapeHtml(featured.author)} • ${formatDateShort(featured.createdAt)}
+                    </p>
+                    <button class="btn btn-primary" onclick="showArticleDetails(${featured.id})">Lire l'article</button>
+                </div>
+                <div class="featured-image">
+                    <span>${getCategoryIcon(featured.category)}</span>
+                </div>
+            </div>
+        `;
+    } else if (featuredArticle) {
+        featuredArticle.innerHTML = '';
+    }
+}
+
+function createArticleCard(article, showDelete = false) {
+    return `
+        <div class="article-card" data-category="${article.category}">
+            <div class="article-card-image">
+                <span>${getCategoryIcon(article.category)}</span>
+            </div>
+            <div class="article-card-content">
                 <span class="article-category ${article.category}">${getCategoryLabel(article.category)}</span>
                 <h3 class="article-title">${escapeHtml(article.title)}</h3>
+                <p class="article-excerpt">${escapeHtml(truncate(article.content, 100))}</p>
+                <div class="article-footer">
+                    <span class="article-author">Par ${escapeHtml(article.author)}</span>
+                    <span class="article-date">${formatDateShort(article.createdAt)}</span>
+                </div>
             </div>
-            <div class="article-body">
-                <p class="article-excerpt">${escapeHtml(truncateText(article.content, 150))}</p>
-            </div>
-            <div class="article-footer">
-                <span class="article-author">Par ${escapeHtml(article.author)}</span>
-                <span class="article-date">${formatDateShort(article.createdAt)}</span>
-            </div>
-            <div style="padding: 0 2rem 1.5rem; display: flex; gap: 1rem;">
+            <div style="padding: 0 1.5rem 1.5rem; display: flex; gap: 0.5rem;">
                 <button class="event-btn event-btn-primary" onclick="showArticleDetails(${article.id})" style="flex: 1;">Lire</button>
-                <button class="event-btn event-btn-delete" onclick="deleteArticle(${article.id})" style="flex: 0;">×</button>
+                ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteArticle(${article.id})" style="flex: 0; padding: 0.75rem;">✕</button>` : ''}
             </div>
         </div>
-    `).join('');
+    `;
 }
 
 function showArticleDetails(id) {
@@ -333,32 +497,32 @@ function showArticleDetails(id) {
     if (!article) return;
 
     const modalBody = document.getElementById('modalBody');
+    if (!modalBody) return;
+
     modalBody.innerHTML = `
-        <div style="margin-bottom: 1.5rem;">
-            <span class="article-category ${article.category}">${getCategoryLabel(article.category)}</span>
-        </div>
-        <h2 style="font-family: 'Orbitron', sans-serif; font-size: 1.8rem; margin-bottom: 1rem;">${escapeHtml(article.title)}</h2>
-        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+        <span class="article-category ${article.category}" style="margin-bottom: 1rem; display: inline-block;">${getCategoryLabel(article.category)}</span>
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 0.5rem;">${escapeHtml(article.title)}</h2>
+        <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 2rem;">
             Par ${escapeHtml(article.author)} • ${formatDateShort(article.createdAt)}
         </p>
-        <div style="color: var(--text-light); line-height: 1.9; white-space: pre-wrap;">${escapeHtml(article.content)}</div>
+        <div style="color: var(--text-secondary); line-height: 1.9; white-space: pre-wrap;">${escapeHtml(article.content)}</div>
     `;
 
     openModal();
 }
 
-function getCategoryLabel(category) {
-    const labels = {
-        news: 'News',
-        interview: 'Interview',
-        review: 'Review',
-        announcement: 'Annonce'
-    };
-    return labels[category] || category;
+function getCategoryLabel(cat) {
+    const labels = { news: 'News', interview: 'Interview', review: 'Review', announcement: 'Annonce' };
+    return labels[cat] || cat;
+}
+
+function getCategoryIcon(cat) {
+    const icons = { news: '📰', interview: '🎤', review: '⭐', announcement: '📢' };
+    return icons[cat] || '📄';
 }
 
 // ====================================
-// GESTION DES PROMOTIONS
+// PROMOTIONS
 // ====================================
 function handlePromoSubmit(e) {
     e.preventDefault();
@@ -372,64 +536,104 @@ function handlePromoSubmit(e) {
         createdAt: new Date().toISOString()
     };
 
-    // Save to localStorage
     const promos = getPromos();
     promos.unshift(promo);
     localStorage.setItem('montblanc_promos', JSON.stringify(promos));
 
-    // Reset form and close panel
     e.target.reset();
-    document.getElementById('promoAdminPanel').classList.remove('open');
+    document.getElementById('promoAdminToggle')?.closest('.admin-section')?.classList.remove('open');
 
-    // Refresh display
     renderPromos();
     showToast('Promotion publiée avec succès !', 'success');
 }
 
 function getPromos() {
-    const promos = localStorage.getItem('montblanc_promos');
-    return promos ? JSON.parse(promos) : [];
+    return JSON.parse(localStorage.getItem('montblanc_promos') || '[]');
 }
 
 function deletePromo(id) {
-    const promos = getPromos().filter(promo => promo.id !== id);
+    const promos = getPromos().filter(p => p.id !== id);
     localStorage.setItem('montblanc_promos', JSON.stringify(promos));
     renderPromos();
     showToast('Promotion supprimée', 'success');
 }
 
 function renderPromos() {
-    const promoGrid = document.getElementById('promoGrid');
+    const promoBanners = document.getElementById('promoBanners');
+    const promosGrid = document.getElementById('promosGrid');
     const promos = getPromos();
 
-    if (promos.length === 0) {
-        promoGrid.innerHTML = `
-            <div class="empty-state" style="grid-column: 1 / -1;">
-                <div class="empty-state-icon">🎁</div>
-                <p class="empty-state-text">Aucune promotion active</p>
-                <p class="empty-state-subtext">Créez des offres spéciales pour vos clients</p>
-            </div>
-        `;
-        return;
+    // Promo banners (first promo with code)
+    if (promoBanners) {
+        const bannerPromos = promos.filter(p => p.code).slice(0, 2);
+        if (bannerPromos.length > 0) {
+            promoBanners.innerHTML = bannerPromos.map(p => `
+                <div class="promo-banner-card">
+                    <div class="promo-banner-info">
+                        <h3>${escapeHtml(p.title)}</h3>
+                        <p>${escapeHtml(p.description)}</p>
+                    </div>
+                    <div class="promo-code-display" onclick="copyPromoCode('${escapeHtml(p.code)}')">${escapeHtml(p.code)}</div>
+                </div>
+            `).join('');
+        } else {
+            promoBanners.innerHTML = '';
+        }
     }
 
-    promoGrid.innerHTML = promos.map((promo, index) => `
-        <div class="promo-card" style="animation-delay: ${index * 0.1}s">
-            <span class="promo-badge">PROMO</span>
-            <h3 class="promo-title">${escapeHtml(promo.title)}</h3>
-            <p class="promo-description">${escapeHtml(promo.description)}</p>
-            ${promo.code ? `<div class="promo-code" onclick="copyPromoCode('${escapeHtml(promo.code)}')">${escapeHtml(promo.code)}</div>` : ''}
-            ${promo.expiry ? `<p class="promo-expiry">⏰ Expire le ${formatDate(promo.expiry)}</p>` : ''}
-            <button class="event-btn event-btn-delete" onclick="deletePromo(${promo.id})" style="margin-top: 1rem; width: 100%;">Supprimer</button>
+    // Promos grid
+    if (promosGrid) {
+        if (promos.length === 0) {
+            promosGrid.innerHTML = createEmptyState('gift', 'Aucune promotion', 'Ajoutez vos offres spéciales ci-dessus');
+        } else {
+            promosGrid.innerHTML = promos.map(p => createPromoCard(p)).join('');
+        }
+    }
+}
+
+function createPromoCard(promo) {
+    return `
+        <div class="promo-card">
+            <span class="promo-card-badge">PROMO</span>
+            <h3 class="promo-card-title">${escapeHtml(promo.title)}</h3>
+            <p class="promo-card-description">${escapeHtml(promo.description)}</p>
+            ${promo.code ? `<div class="promo-card-code" onclick="copyPromoCode('${escapeHtml(promo.code)}')">${escapeHtml(promo.code)}</div>` : ''}
+            ${promo.expiry ? `<p class="promo-card-expiry">⏰ Expire le ${formatDateShort(promo.expiry)}</p>` : ''}
+            <button class="event-btn event-btn-delete" onclick="deletePromo(${promo.id})" style="width: 100%; margin-top: 1rem;">Supprimer</button>
         </div>
-    `).join('');
+    `;
 }
 
 function copyPromoCode(code) {
     navigator.clipboard.writeText(code).then(() => {
-        showToast('Code promo copié !', 'success');
+        showToast('Code copié : ' + code, 'success');
     }).catch(() => {
-        showToast('Impossible de copier le code', 'error');
+        showToast('Impossible de copier', 'error');
+    });
+}
+
+// ====================================
+// FILTRES
+// ====================================
+function initFilters() {
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderArticles(btn.dataset.filter);
+        });
+    });
+}
+
+// ====================================
+// CONTACT FORM
+// ====================================
+function initContactForm() {
+    const form = document.getElementById('contactForm');
+    form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        showToast('Message envoyé ! Nous vous répondrons rapidement.', 'success');
+        form.reset();
     });
 }
 
@@ -438,117 +642,72 @@ function copyPromoCode(code) {
 // ====================================
 function initModal() {
     const modal = document.getElementById('modal');
-    const modalClose = document.getElementById('modalClose');
+    const closeBtn = document.getElementById('modalClose');
+    const overlay = document.querySelector('.modal-overlay');
 
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
+    closeBtn?.addEventListener('click', closeModal);
+    overlay?.addEventListener('click', closeModal);
 
-    // Close modal on Escape key
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            closeModal();
-        }
+        if (e.key === 'Escape') closeModal();
     });
 }
 
 function openModal() {
-    const modal = document.getElementById('modal');
-    modal.classList.add('active');
+    document.getElementById('modal')?.classList.add('active');
     document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-    const modal = document.getElementById('modal');
-    modal.classList.remove('active');
+    document.getElementById('modal')?.classList.remove('active');
     document.body.style.overflow = '';
-}
-
-// ====================================
-// ANIMATIONS AU SCROLL
-// ====================================
-function initScrollAnimations() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
-
-    document.querySelectorAll('.animate-on-scroll').forEach(el => {
-        observer.observe(el);
-    });
-}
-
-// ====================================
-// FORMULAIRE DE CONTACT
-// ====================================
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-
-        // Simulate form submission
-        showToast('Message envoyé avec succès ! Nous vous répondrons rapidement.', 'success');
-        contactForm.reset();
-    });
 }
 
 // ====================================
 // CHARGEMENT DU CONTENU
 // ====================================
 function loadContent() {
+    // Load demo content first time
+    if (!localStorage.getItem('montblanc_demo_v2')) {
+        loadDemoContent();
+        localStorage.setItem('montblanc_demo_v2', 'true');
+    }
+
     renderEvents();
     renderArticles();
     renderPromos();
-
-    // Add some demo content if empty (only first time)
-    if (!localStorage.getItem('montblanc_demo_loaded')) {
-        addDemoContent();
-        localStorage.setItem('montblanc_demo_loaded', 'true');
-    }
 }
 
-function addDemoContent() {
-    // Demo events
+function loadDemoContent() {
     const demoEvents = [
         {
             id: Date.now() + 1,
             title: 'Nuit Électronique',
             date: getNextSaturday(),
             time: '23:00',
-            description: 'Une soirée électro exceptionnelle avec les meilleurs DJs de la région. Laser show, confettis et ambiance de folie garantis !',
+            description: 'Une soirée électro exceptionnelle avec les meilleurs DJs de la région. Système son dernière génération, light show spectaculaire et ambiance garantie jusqu\'au bout de la nuit. Dress code : élégant.',
             dj: 'DJ STORM & LUNA',
             price: '15€ (gratuit avant minuit)',
             createdAt: new Date().toISOString()
         },
         {
             id: Date.now() + 2,
-            title: 'Tropical Night',
+            title: 'White Party',
             date: getNextFriday(),
             time: '22:00',
-            description: 'Ambiance tropicale, cocktails exotiques et sons latino pour une soirée inoubliable sous les palmiers virtuels !',
-            dj: 'CARLOS VEGA',
+            description: 'Tout le monde en blanc pour cette soirée exceptionnelle. Cocktails spéciaux, photographe officiel et surprises toute la nuit. La soirée incontournable de la saison.',
+            dj: 'RESIDENT DJS',
             price: '10€',
             createdAt: new Date().toISOString()
         }
     ];
 
-    // Demo articles
     const demoArticles = [
         {
             id: Date.now() + 3,
-            title: 'Le Mont Blanc fait peau neuve !',
+            title: 'Le Mont Blanc fait peau neuve',
             category: 'news',
-            content: 'Après des mois de travaux, votre discothèque préférée rouvre ses portes avec un tout nouveau look. Nouveau système son, éclairage LED dernière génération et décoration totalement repensée. Venez découvrir le nouveau visage du Mont Blanc !',
+            content: 'Après plusieurs mois de travaux, votre discothèque préférée rouvre ses portes avec un tout nouveau look.\n\nNouveau système son Funktion-One, éclairage LED dernière génération avec DMX intelligent, et une décoration totalement repensée par un designer parisien.\n\nLe bar a également été agrandi pour un service plus rapide, et nous avons créé un nouvel espace VIP avec vue panoramique sur le dancefloor.\n\nVenez découvrir le nouveau visage du Mont Blanc dès ce week-end !',
             author: 'L\'équipe',
             createdAt: new Date().toISOString()
         },
@@ -556,28 +715,43 @@ function addDemoContent() {
             id: Date.now() + 4,
             title: 'Interview exclusive avec DJ Storm',
             category: 'interview',
-            content: 'Nous avons rencontré DJ Storm, notre résident depuis 5 ans. Il nous parle de son parcours, ses inspirations et ses projets pour les mois à venir. Une interview passionnante à ne pas manquer !',
+            content: 'Nous avons rencontré DJ Storm, notre résident depuis 5 ans, pour parler de son parcours et de ses projets.\n\n"Le Mont Blanc, c\'est ma deuxième maison. J\'ai vu ce club évoluer et grandir, et je suis fier d\'en faire partie."\n\nDJ Storm nous parle de ses influences, de la scène électro locale et de ses projets pour les mois à venir, notamment une collaboration internationale qui devrait faire parler d\'elle.',
             author: 'Marie L.',
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: Date.now() + 5,
+            title: 'Retour sur la soirée d\'ouverture',
+            category: 'review',
+            content: 'La soirée d\'inauguration a été un succès total ! Plus de 800 personnes ont répondu présent pour découvrir le nouveau Mont Blanc.\n\nAmbiance de folie, son parfait et service irréprochable : tous les ingrédients étaient réunis pour une nuit mémorable.',
+            author: 'Rédaction',
             createdAt: new Date().toISOString()
         }
     ];
 
-    // Demo promos
     const demoPromos = [
         {
-            id: Date.now() + 5,
+            id: Date.now() + 6,
             title: 'Happy Hour Extended',
-            description: 'Tous les vendredis, happy hour jusqu\'à 1h du matin ! Cocktails et shots à -50%.',
+            description: 'Tous les vendredis, profitez de notre happy hour prolongé jusqu\'à 1h du matin ! Cocktails signatures et shots premium à -50%.',
             code: 'HAPPY50',
             expiry: getDateInFuture(30),
             createdAt: new Date().toISOString()
         },
         {
-            id: Date.now() + 6,
+            id: Date.now() + 7,
             title: 'Soirée Anniversaire',
-            description: 'C\'est ton anniversaire ce mois-ci ? Entrée gratuite + une bouteille offerte sur présentation d\'une pièce d\'identité !',
+            description: 'C\'est ton anniversaire ce mois-ci ? Entrée gratuite + une bouteille offerte pour toi et tes amis sur présentation de ta pièce d\'identité.',
             code: '',
             expiry: '',
+            createdAt: new Date().toISOString()
+        },
+        {
+            id: Date.now() + 8,
+            title: 'Pack VIP Week-end',
+            description: 'Réservez votre carré VIP pour 4 personnes minimum et bénéficiez d\'une bouteille de champagne offerte.',
+            code: 'VIP2024',
+            expiry: getDateInFuture(60),
             createdAt: new Date().toISOString()
         }
     ];
@@ -585,10 +759,6 @@ function addDemoContent() {
     localStorage.setItem('montblanc_events', JSON.stringify(demoEvents));
     localStorage.setItem('montblanc_articles', JSON.stringify(demoArticles));
     localStorage.setItem('montblanc_promos', JSON.stringify(demoPromos));
-
-    renderEvents();
-    renderArticles();
-    renderPromos();
 }
 
 // ====================================
@@ -601,69 +771,69 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-function formatDate(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-    return date.toLocaleDateString('fr-FR', options);
-}
-
-function formatDateShort(dateString) {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const options = { day: 'numeric', month: 'short', year: 'numeric' };
-    return date.toLocaleDateString('fr-FR', options);
-}
-
-function truncateText(text, maxLength) {
+function truncate(text, max) {
     if (!text) return '';
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+    return text.length > max ? text.substring(0, max) + '...' : text;
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+function formatDateShort(dateStr) {
+    if (!dateStr) return '';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
 function getNextSaturday() {
-    const today = new Date();
-    const daysUntilSaturday = (6 - today.getDay() + 7) % 7 || 7;
-    const nextSaturday = new Date(today);
-    nextSaturday.setDate(today.getDate() + daysUntilSaturday);
-    return nextSaturday.toISOString().split('T')[0];
+    const d = new Date();
+    d.setDate(d.getDate() + ((6 - d.getDay() + 7) % 7 || 7));
+    return d.toISOString().split('T')[0];
 }
 
 function getNextFriday() {
-    const today = new Date();
-    const daysUntilFriday = (5 - today.getDay() + 7) % 7 || 7;
-    const nextFriday = new Date(today);
-    nextFriday.setDate(today.getDate() + daysUntilFriday);
-    return nextFriday.toISOString().split('T')[0];
+    const d = new Date();
+    d.setDate(d.getDate() + ((5 - d.getDay() + 7) % 7 || 7));
+    return d.toISOString().split('T')[0];
 }
 
 function getDateInFuture(days) {
-    const date = new Date();
-    date.setDate(date.getDate() + days);
-    return date.toISOString().split('T')[0];
+    const d = new Date();
+    d.setDate(d.getDate() + days);
+    return d.toISOString().split('T')[0];
+}
+
+function createEmptyState(icon, title, subtitle) {
+    const icons = { calendar: '📅', newspaper: '📰', gift: '🎁' };
+    return `
+        <div class="empty-state">
+            <div class="empty-state-icon">${icons[icon] || '📌'}</div>
+            <p class="empty-state-text">${title}</p>
+            <p class="empty-state-subtext">${subtitle}</p>
+        </div>
+    `;
 }
 
 // ====================================
-// TOAST NOTIFICATIONS
+// TOAST
 // ====================================
 function showToast(message, type = 'success') {
-    const toastContainer = document.getElementById('toastContainer');
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <span>${type === 'success' ? '✅' : '❌'}</span>
-        <span>${message}</span>
-    `;
-    toastContainer.appendChild(toast);
+    toast.innerHTML = `<span>${type === 'success' ? '✓' : '✕'}</span><span>${message}</span>`;
+    container.appendChild(toast);
 
-    // Remove toast after animation
-    setTimeout(() => {
-        toast.remove();
-    }, 3000);
+    setTimeout(() => toast.remove(), 3000);
 }
 
 // ====================================
-// FONCTIONS GLOBALES (accessibles depuis HTML)
+// EXPOSER FONCTIONS GLOBALES
 // ====================================
 window.deleteEvent = deleteEvent;
 window.deleteArticle = deleteArticle;

@@ -3,36 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Mont Blanc - Discothèque</title>
+    <title>Mont Blanc Discothèque - Accueil</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
     <link rel="icon" href="assets/logo.png" type="image/png">
 </head>
 <body>
-    <!-- Particules animées en arrière-plan -->
-    <div class="particles" id="particles"></div>
-
-    <!-- Effet de lumière laser -->
-    <div class="laser-container">
-        <div class="laser laser-1"></div>
-        <div class="laser laser-2"></div>
-        <div class="laser laser-3"></div>
-        <div class="laser laser-4"></div>
+    <!-- Snowfall Effect -->
+    <div class="snowfall-container">
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
+        <div class="snowflake">❄</div>
+        <div class="snowflake">❅</div>
+        <div class="snowflake">❆</div>
     </div>
+
+    <!-- Fond animé spectaculaire -->
+    <div class="bg-container">
+        <div class="bg-gradient-animate"></div>
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        <div class="orb orb-4"></div>
+        <div class="orb orb-5"></div>
+        <div class="noise-overlay"></div>
+        <div class="grid-overlay"></div>
+        <!-- Laser beams -->
+        <div class="laser-container">
+            <div class="laser laser-1"></div>
+            <div class="laser laser-2"></div>
+            <div class="laser laser-3"></div>
+            <div class="laser laser-4"></div>
+        </div>
+        <!-- Floating particles -->
+        <div class="particles-container" id="particlesHero"></div>
+    </div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-dot" id="cursorDot"></div>
 
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="#home" class="logo">
-                <img src="assets/logo.png" alt="Le Mont Blanc Logo">
-                <span class="logo-text">LE MONT BLANC</span>
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Mont Blanc Logo">
             </a>
-            <ul class="nav-links">
-                <li><a href="#home" class="nav-link active">Accueil</a></li>
-                <li><a href="#events" class="nav-link">Événements</a></li>
-                <li><a href="#articles" class="nav-link">Articles</a></li>
-                <li><a href="#gallery" class="nav-link">Galerie</a></li>
-                <li><a href="#contact" class="nav-link">Contact</a></li>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="nav-link active">Accueil</a></li>
+                <li><a href="events.html" class="nav-link">Événements</a></li>
+                <li><a href="articles.html" class="nav-link">Articles</a></li>
+                <li><a href="promos.html" class="nav-link">Promos</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
             </ul>
             <button class="menu-toggle" id="menuToggle">
                 <span></span>
@@ -42,266 +74,292 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
+    <!-- Hero Section SPECTACULAR -->
+    <section class="hero">
+        <!-- Animated rings -->
+        <div class="hero-rings">
+            <div class="ring ring-1"></div>
+            <div class="ring ring-2"></div>
+            <div class="ring ring-3"></div>
+        </div>
+
+        <!-- Glowing backdrop -->
+        <div class="hero-glow"></div>
+
         <div class="hero-content">
-            <div class="hero-logo">
-                <img src="assets/logo.png" alt="Le Mont Blanc">
+            <!-- Animated text reveal -->
+            <div class="hero-pretitle">
+                <span class="hero-pretitle-line"></span>
+                <span class="hero-pretitle-text">BIENVENUE AU</span>
+                <span class="hero-pretitle-line"></span>
             </div>
-            <h1 class="hero-title glitch" data-text="LE MONT BLANC">LE MONT BLANC</h1>
-            <p class="hero-subtitle">L'expérience nightlife ultime</p>
-            <div class="hero-cta">
-                <a href="#events" class="btn btn-primary pulse-glow">Découvrir nos soirées</a>
-                <a href="#contact" class="btn btn-secondary">Réserver</a>
+
+            <div class="hero-logo-container">
+                <div class="hero-logo-glow"></div>
+                <img src="assets/logo.png" alt="Mont Blanc" class="hero-logo">
+                <div class="hero-logo-reflection"></div>
+            </div>
+
+            <h1 class="hero-title">
+                <span class="hero-title-line">
+                    <span class="hero-title-word" data-text="L'EXPÉRIENCE">L'EXPÉRIENCE</span>
+                </span>
+                <span class="hero-title-line">
+                    <span class="hero-title-word gradient-text" data-text="NIGHTLIFE">NIGHTLIFE</span>
+                </span>
+                <span class="hero-title-line">
+                    <span class="hero-title-word" data-text="D'EXCEPTION">D'EXCEPTION</span>
+                </span>
+            </h1>
+
+            <p class="hero-tagline">
+                <span class="tagline-icon">❄</span>
+                Annecy • Haute-Savoie • France
+                <span class="tagline-icon">❄</span>
+            </p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-number" data-count="15">0</span>
+                    <span class="stat-label">Ans d'expérience</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number" data-count="500">0</span>
+                    <span class="stat-label">Soirées par an</span>
+                </div>
+                <div class="hero-stat-divider"></div>
+                <div class="hero-stat">
+                    <span class="stat-number" data-count="50000">0</span>
+                    <span class="stat-label">Clients satisfaits</span>
+                </div>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="events.html" class="btn btn-primary btn-glow">
+                    <span class="btn-text">Nos Soirées</span>
+                    <span class="btn-icon">→</span>
+                </a>
+                <a href="contact.html" class="btn btn-outline btn-shine">
+                    <span class="btn-text">Réserver VIP</span>
+                </a>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <span>Scroll</span>
-            <div class="scroll-arrow"></div>
+
+        <!-- Scroll indicator -->
+        <div class="hero-scroll">
+            <div class="scroll-mouse">
+                <div class="scroll-wheel"></div>
+            </div>
+            <span class="scroll-text">SCROLL</span>
+            <div class="scroll-arrows">
+                <span class="scroll-arrow"></span>
+                <span class="scroll-arrow"></span>
+                <span class="scroll-arrow"></span>
+            </div>
         </div>
+
+        <!-- Side decorations -->
+        <div class="hero-side-text left">MONT BLANC DISCOTHÈQUE</div>
+        <div class="hero-side-text right">SINCE 2009</div>
     </section>
 
-    <!-- Annonces Soirées Spéciales -->
-    <section id="events" class="section events-section">
-        <div class="section-header">
-            <h2 class="section-title neon-text">SOIRÉES SPÉCIALES</h2>
-            <p class="section-subtitle">Ne manquez aucun événement exclusif</p>
-        </div>
-
-        <!-- Admin Panel pour ajouter des annonces -->
-        <div class="admin-panel" id="adminPanel">
-            <button class="admin-toggle" id="adminToggle">
-                <span class="admin-icon">+</span> Publier une annonce
-            </button>
-            <form class="event-form" id="eventForm">
-                <div class="form-group">
-                    <input type="text" id="eventTitle" placeholder="Titre de l'événement" required>
-                </div>
-                <div class="form-group">
-                    <input type="date" id="eventDate" required>
-                </div>
-                <div class="form-group">
-                    <input type="time" id="eventTime" required>
-                </div>
-                <div class="form-group">
-                    <textarea id="eventDescription" placeholder="Description de la soirée..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="eventDj" placeholder="DJ / Artiste invité">
-                </div>
-                <div class="form-group">
-                    <input type="text" id="eventPrice" placeholder="Prix d'entrée (ex: 15€)">
-                </div>
-                <button type="submit" class="btn btn-primary">Publier l'annonce</button>
-            </form>
-        </div>
-
-        <div class="events-grid" id="eventsGrid">
-            <!-- Events will be dynamically added here -->
-        </div>
-    </section>
-
-    <!-- Articles / Blog -->
-    <section id="articles" class="section articles-section">
-        <div class="section-header">
-            <h2 class="section-title neon-text">ARTICLES & NEWS</h2>
-            <p class="section-subtitle">Restez connectés avec l'actualité du club</p>
-        </div>
-
-        <!-- Admin Panel pour articles -->
-        <div class="admin-panel" id="articleAdminPanel">
-            <button class="admin-toggle" id="articleAdminToggle">
-                <span class="admin-icon">+</span> Publier un article
-            </button>
-            <form class="article-form" id="articleForm">
-                <div class="form-group">
-                    <input type="text" id="articleTitle" placeholder="Titre de l'article" required>
-                </div>
-                <div class="form-group">
-                    <select id="articleCategory">
-                        <option value="news">News</option>
-                        <option value="interview">Interview</option>
-                        <option value="review">Review</option>
-                        <option value="announcement">Annonce</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <textarea id="articleContent" placeholder="Contenu de l'article..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="articleAuthor" placeholder="Auteur">
-                </div>
-                <button type="submit" class="btn btn-primary">Publier l'article</button>
-            </form>
-        </div>
-
-        <div class="articles-grid" id="articlesGrid">
-            <!-- Articles will be dynamically added here -->
-        </div>
-    </section>
-
-    <!-- Publicités / Promotions -->
-    <section id="promo" class="section promo-section">
-        <div class="section-header">
-            <h2 class="section-title neon-text">PROMOTIONS</h2>
-            <p class="section-subtitle">Offres exclusives et partenariats</p>
-        </div>
-
-        <!-- Admin Panel pour pubs -->
-        <div class="admin-panel" id="promoAdminPanel">
-            <button class="admin-toggle" id="promoAdminToggle">
-                <span class="admin-icon">+</span> Ajouter une publicité
-            </button>
-            <form class="promo-form" id="promoForm">
-                <div class="form-group">
-                    <input type="text" id="promoTitle" placeholder="Titre de la promotion" required>
-                </div>
-                <div class="form-group">
-                    <textarea id="promoDescription" placeholder="Description de l'offre..." required></textarea>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="promoCode" placeholder="Code promo (optionnel)">
-                </div>
-                <div class="form-group">
-                    <input type="date" id="promoExpiry" placeholder="Date d'expiration">
-                </div>
-                <button type="submit" class="btn btn-primary">Publier la promotion</button>
-            </form>
-        </div>
-
-        <div class="promo-grid" id="promoGrid">
-            <!-- Promos will be dynamically added here -->
-        </div>
-    </section>
-
-    <!-- Galerie -->
-    <section id="gallery" class="section gallery-section">
-        <div class="section-header">
-            <h2 class="section-title neon-text">GALERIE</h2>
-            <p class="section-subtitle">Les meilleurs moments capturés</p>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item" style="--delay: 0.1s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">🎉</span>
-                    <p>Soirée VIP</p>
-                </div>
+    <!-- Section À Propos -->
+    <section class="section about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Bienvenue</span>
+                <h2 class="section-title">Une expérience unique</h2>
             </div>
-            <div class="gallery-item" style="--delay: 0.2s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">🎧</span>
-                    <p>DJ Set</p>
+            <div class="about-grid">
+                <div class="about-card glass-card">
+                    <div class="about-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 18V5l12-2v13"></path>
+                            <circle cx="6" cy="18" r="3"></circle>
+                            <circle cx="18" cy="16" r="3"></circle>
+                        </svg>
+                    </div>
+                    <h3>Son Premium</h3>
+                    <p>Système audio dernière génération pour une immersion totale</p>
                 </div>
-            </div>
-            <div class="gallery-item" style="--delay: 0.3s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">✨</span>
-                    <p>Ambiance</p>
+                <div class="about-card glass-card">
+                    <div class="about-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </div>
+                    <h3>Light Show</h3>
+                    <p>Éclairages LED et lasers pour des nuits spectaculaires</p>
                 </div>
-            </div>
-            <div class="gallery-item" style="--delay: 0.4s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">🍾</span>
-                    <p>Célébrations</p>
+                <div class="about-card glass-card">
+                    <div class="about-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>VIP Experience</h3>
+                    <p>Espaces privatifs et service personnalisé</p>
                 </div>
-            </div>
-            <div class="gallery-item" style="--delay: 0.5s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">💃</span>
-                    <p>Dancefloor</p>
-                </div>
-            </div>
-            <div class="gallery-item" style="--delay: 0.6s">
-                <div class="gallery-placeholder">
-                    <span class="gallery-icon">🎤</span>
-                    <p>Live Show</p>
+                <div class="about-card glass-card">
+                    <div class="about-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M8 2v4"></path>
+                            <path d="M16 2v4"></path>
+                            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                            <path d="M3 10h18"></path>
+                        </svg>
+                    </div>
+                    <h3>Events</h3>
+                    <p>Soirées thématiques et DJ sets internationaux</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="section contact-section">
-        <div class="section-header">
-            <h2 class="section-title neon-text">CONTACT</h2>
-            <p class="section-subtitle">Rejoignez-nous</p>
+    <!-- Bannière Promo -->
+    <section class="promo-banner">
+        <div class="promo-banner-content">
+            <div class="promo-banner-text">
+                <span class="promo-badge">OFFRE SPÉCIALE</span>
+                <h3>Happy Hour tous les vendredis</h3>
+                <p>Cocktails à -50% jusqu'à 1h du matin</p>
+            </div>
+            <a href="promos.html" class="btn btn-white">Voir les offres</a>
         </div>
-        <div class="contact-container">
-            <div class="contact-info">
-                <div class="contact-card">
-                    <div class="contact-icon">📍</div>
-                    <h3>Adresse</h3>
-                    <p>123 Avenue des Alpes<br>74000 Annecy, France</p>
+    </section>
+
+    <!-- Section Événements Preview -->
+    <section class="section events-preview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Agenda</span>
+                <h2 class="section-title">Prochaines soirées</h2>
+                <a href="events.html" class="section-link">Voir tout →</a>
+            </div>
+            <div class="events-grid" id="eventsPreview">
+                <!-- Events loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Articles Preview -->
+    <section class="section articles-preview">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Actualités</span>
+                <h2 class="section-title">Derniers articles</h2>
+                <a href="articles.html" class="section-link">Voir tout →</a>
+            </div>
+            <div class="articles-grid" id="articlesPreview">
+                <!-- Articles loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Galerie -->
+    <section class="section gallery-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Ambiance</span>
+                <h2 class="section-title">L'univers Mont Blanc</h2>
+            </div>
+            <div class="gallery-mosaic">
+                <div class="gallery-item large frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1571266028243-e4733b0f0bb0?w=800&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">🎧</span>
+                            <span>DJ SET</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">📞</div>
-                    <h3>Téléphone</h3>
-                    <p>+33 4 50 XX XX XX</p>
+                <div class="gallery-item frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">🥂</span>
+                            <span>VIP</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">🕐</div>
-                    <h3>Horaires</h3>
-                    <p>Jeudi - Samedi<br>23h00 - 05h00</p>
+                <div class="gallery-item frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">💃</span>
+                            <span>DANCE</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="contact-card">
-                    <div class="contact-icon">✉️</div>
-                    <h3>Email</h3>
-                    <p>contact@lemontblanc.fr</p>
+                <div class="gallery-item tall frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">✨</span>
+                            <span>LIGHTS</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=600&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">🍸</span>
+                            <span>BAR</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="gallery-item frost-frame">
+                    <div class="gallery-image" style="background-image: url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80');">
+                        <div class="gallery-overlay">
+                            <span class="gallery-emoji">🎉</span>
+                            <span>PARTY</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <form class="contact-form" id="contactForm">
-                <div class="form-group">
-                    <input type="text" placeholder="Votre nom" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Votre email" required>
-                </div>
-                <div class="form-group">
-                    <input type="tel" placeholder="Votre téléphone">
-                </div>
-                <div class="form-group">
-                    <select>
-                        <option value="">Type de demande</option>
-                        <option value="reservation">Réservation VIP</option>
-                        <option value="privatisation">Privatisation</option>
-                        <option value="partenariat">Partenariat</option>
-                        <option value="autre">Autre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Votre message..." required></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary">Envoyer</button>
-            </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-logo">
-                <img src="assets/logo.png" alt="Le Mont Blanc">
-                <span>LE MONT BLANC</span>
+            <div class="footer-brand">
+                <img src="assets/logo.png" alt="Mont Blanc">
+                <p>L'expérience nightlife d'exception au cœur des Alpes</p>
             </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Navigation</h4>
+                    <a href="index.html">Accueil</a>
+                    <a href="events.html">Événements</a>
+                    <a href="articles.html">Articles</a>
+                    <a href="promos.html">Promotions</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <p>123 Avenue des Alpes</p>
+                    <p>74000 Annecy</p>
+                    <p>+33 4 50 XX XX XX</p>
+                </div>
+                <div class="footer-column">
+                    <h4>Horaires</h4>
+                    <p>Jeudi: 23h - 04h</p>
+                    <p>Vendredi: 23h - 05h</p>
+                    <p>Samedi: 23h - 06h</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 Mont Blanc Discothèque. Tous droits réservés.</p>
             <div class="footer-social">
-                <a href="#" class="social-link">Facebook</a>
-                <a href="#" class="social-link">Instagram</a>
-                <a href="#" class="social-link">TikTok</a>
-                <a href="#" class="social-link">Snapchat</a>
+                <a href="#" class="social-icon">FB</a>
+                <a href="#" class="social-icon">IG</a>
+                <a href="#" class="social-icon">TK</a>
             </div>
-            <p class="footer-copyright">© 2024 Le Mont Blanc - Tous droits réservés</p>
         </div>
     </footer>
 
-    <!-- Modal pour afficher les détails -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <button class="modal-close" id="modalClose">&times;</button>
-            <div class="modal-body" id="modalBody"></div>
-        </div>
-    </div>
-
-    <!-- Toast notifications -->
+    <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script src="script.js"></script>
