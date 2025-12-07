@@ -96,15 +96,19 @@
 
             <div class="hero-logo-container">
                 <div class="hero-logo-glow"></div>
-                <img src="assets/logo.png" alt="Mont Blanc" class="hero-logo">
+                <div class="hero-logo-frame snow-frame">
+                    <img src="assets/logo.png" alt="Mont Blanc" class="hero-logo">
+                    <div class="snow-corner snow-corner-tl"></div>
+                    <div class="snow-corner snow-corner-tr"></div>
+                    <div class="snow-corner snow-corner-bl"></div>
+                    <div class="snow-corner snow-corner-br"></div>
+                </div>
                 <div class="hero-logo-reflection"></div>
             </div>
 
             <h1 class="hero-title">
-                <span class="hero-title-line">
+                <span class="hero-title-line hero-title-line-main">
                     <span class="hero-title-word" data-text="L'EXPÉRIENCE">L'EXPÉRIENCE</span>
-                </span>
-                <span class="hero-title-line">
                     <span class="hero-title-word gradient-text" data-text="NIGHTLIFE">NIGHTLIFE</span>
                 </span>
                 <span class="hero-title-line">
@@ -138,7 +142,7 @@
             <div class="hero-buttons">
                 <a href="events.html" class="btn btn-primary btn-glow">
                     <span class="btn-text">Nos Soirées</span>
-                    <span class="btn-icon">→</span>
+        
                 </a>
                 <a href="contact.html" class="btn btn-outline btn-shine">
                     <span class="btn-text">Réserver VIP</span>
@@ -256,6 +260,95 @@
             </div>
             <div class="articles-grid" id="articlesPreview">
                 <!-- Articles loaded by JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Réservation -->
+    <section class="section reservation-section">
+        <div class="container">
+            <div class="section-header" style="text-align: center;">
+                <span class="section-tag">Expérience VIP</span>
+                <h2 class="section-title">Réservez votre <span>soirée</span></h2>
+                <p style="color: rgba(255,255,255,0.6); max-width: 600px; margin: 1.5rem auto 0;">
+                    Vivez une expérience inoubliable au Mont Blanc avec nos formules exclusives
+                </p>
+            </div>
+            <div class="reservation-grid">
+                <!-- Standard -->
+                <div class="reservation-card snow-frame">
+                    <div class="reservation-card-image">
+                        <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=600&q=80" alt="Entrée Standard" loading="lazy">
+                        <span class="reservation-badge">STANDARD</span>
+                        <div class="snow-corner snow-corner-tl"></div>
+                        <div class="snow-corner snow-corner-tr"></div>
+                    </div>
+                    <div class="reservation-card-content">
+                        <h3 class="reservation-card-title">Entrée Simple</h3>
+                        <p class="reservation-card-description">Accès à la piste de danse et au bar principal. Parfait pour une soirée entre amis.</p>
+                        <div class="reservation-features">
+                            <span class="reservation-feature">🎵 Accès Dancefloor</span>
+                            <span class="reservation-feature">🍸 Bar principal</span>
+                            <span class="reservation-feature">🎧 DJ Set</span>
+                        </div>
+                        <div class="reservation-price">
+                            <span class="reservation-price-amount">15€</span>
+                            <span class="reservation-price-period">/ personne</span>
+                        </div>
+                        <button class="reservation-btn" onclick="showToast('Réservation bientôt disponible!', 'success')">Réserver</button>
+                    </div>
+                </div>
+
+                <!-- VIP -->
+                <div class="reservation-card snow-frame">
+                    <div class="reservation-card-image">
+                        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80" alt="Pack VIP" loading="lazy">
+                        <span class="reservation-badge popular">POPULAIRE</span>
+                        <div class="snow-corner snow-corner-tl"></div>
+                        <div class="snow-corner snow-corner-tr"></div>
+                    </div>
+                    <div class="reservation-card-content">
+                        <h3 class="reservation-card-title">Pack VIP</h3>
+                        <p class="reservation-card-description">Accès privilégié avec table réservée et bouteille de champagne offerte. L'expérience Mont Blanc par excellence.</p>
+                        <div class="reservation-features">
+                            <span class="reservation-feature">🥂 1 Bouteille offerte</span>
+                            <span class="reservation-feature">🛋️ Table réservée</span>
+                            <span class="reservation-feature">⭐ Accès VIP</span>
+                            <span class="reservation-feature">🎁 Goodies</span>
+                        </div>
+                        <div class="reservation-price">
+                            <span class="reservation-price-amount">150€</span>
+                            <span class="reservation-price-period">/ 4 personnes</span>
+                        </div>
+                        <button class="reservation-btn" onclick="showToast('Réservation bientôt disponible!', 'success')">Réserver</button>
+                    </div>
+                </div>
+
+                <!-- Premium -->
+                <div class="reservation-card snow-frame">
+                    <div class="reservation-card-image">
+                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80" alt="Carré Prestige" loading="lazy">
+                        <span class="reservation-badge">PRESTIGE</span>
+                        <div class="snow-corner snow-corner-tl"></div>
+                        <div class="snow-corner snow-corner-tr"></div>
+                    </div>
+                    <div class="reservation-card-content">
+                        <h3 class="reservation-card-title">Carré Prestige</h3>
+                        <p class="reservation-card-description">Le summum du luxe. Espace privatif avec vue sur scène, service dédié et sélection premium de spiritueux.</p>
+                        <div class="reservation-features">
+                            <span class="reservation-feature">🍾 2 Bouteilles premium</span>
+                            <span class="reservation-feature">👑 Espace privatif</span>
+                            <span class="reservation-feature">🎤 Accès backstage</span>
+                            <span class="reservation-feature">🚗 Voiturier</span>
+                            <span class="reservation-feature">📸 Photographe</span>
+                        </div>
+                        <div class="reservation-price">
+                            <span class="reservation-price-amount">400€</span>
+                            <span class="reservation-price-period">/ 8 personnes</span>
+                        </div>
+                        <button class="reservation-btn" onclick="showToast('Réservation bientôt disponible!', 'success')">Réserver</button>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

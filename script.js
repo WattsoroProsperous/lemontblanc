@@ -295,7 +295,7 @@ function renderEvents() {
         if (events.length === 0) {
             eventsPreview.innerHTML = createEmptyState('calendar', 'Aucun événement', 'Les prochaines soirées apparaîtront ici');
         } else {
-            eventsPreview.innerHTML = events.slice(0, 3).map(e => createEventCard(e)).join('');
+            eventsPreview.innerHTML = events.slice(0, 3).map((e, i) => createEventCard(e, false, i)).join('');
         }
     }
 
@@ -304,7 +304,7 @@ function renderEvents() {
         if (events.length === 0) {
             eventsList.innerHTML = createEmptyState('calendar', 'Aucun événement programmé', 'Publiez votre première soirée ci-dessus');
         } else {
-            eventsList.innerHTML = events.map(e => createEventCard(e, true)).join('');
+            eventsList.innerHTML = events.map((e, i) => createEventCard(e, true, i)).join('');
         }
     }
 
@@ -335,22 +335,41 @@ function renderEvents() {
     }
 }
 
-function createEventCard(event, showDelete = false) {
+// Event preview images based on keywords
+const eventImages = [
+    'https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600&q=80',
+    'https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?w=600&q=80',
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600&q=80',
+    'https://images.unsplash.com/photo-1571266028243-d8ba36b745?w=600&q=80',
+    'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80',
+    'https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=600&q=80'
+];
+
+function getEventImage(index) {
+    return eventImages[index % eventImages.length];
+}
+
+function createEventCard(event, showDelete = false, index = 0) {
+    const imageUrl = event.image || getEventImage(index);
     return `
-        <div class="event-card">
-            <div class="event-card-header">
-                <span class="event-date-badge">📅 ${formatDateShort(event.date)} • ${event.time}</span>
-                <h3 class="event-title">${escapeHtml(event.title)}</h3>
+        <div class="event-card-new snow-frame">
+            <div class="event-card-image">
+                <img src="${imageUrl}" alt="${escapeHtml(event.title)}" loading="lazy">
+                <span class="event-card-date-overlay">📅 ${formatDateShort(event.date)}</span>
+                <div class="snow-corner snow-corner-tl"></div>
+                <div class="snow-corner snow-corner-tr"></div>
             </div>
-            <div class="event-card-body">
-                <p class="event-description">${escapeHtml(truncate(event.description, 120))}</p>
-                <div class="event-meta">
+            <div class="event-card-body" style="padding: 1.5rem;">
+                <h3 class="event-title" style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem;">${escapeHtml(event.title)}</h3>
+                <p class="event-time" style="color: rgba(255,255,255,0.6); font-size: 0.85rem; margin-bottom: 1rem;">🕐 ${event.time}</p>
+                <p class="event-description">${escapeHtml(truncate(event.description, 100))}</p>
+                <div class="event-meta" style="margin: 1rem 0;">
                     ${event.dj ? `<span class="event-meta-item">🎧 ${escapeHtml(event.dj)}</span>` : ''}
                     ${event.price ? `<span class="event-meta-item">💰 ${escapeHtml(event.price)}</span>` : ''}
                 </div>
                 <div class="event-actions">
-                    <button class="event-btn event-btn-primary" onclick="showEventDetails(${event.id})">Détails</button>
-                    ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteEvent(${event.id})">Supprimer</button>` : ''}
+                    <button class="event-btn event-btn-primary" onclick="showEventDetails(${event.id})">Réserver</button>
+                    ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteEvent(${event.id})">✕</button>` : ''}
                 </div>
             </div>
         </div>
@@ -432,7 +451,7 @@ function renderArticles(filter = 'all') {
         if (allArticles.length === 0) {
             articlesPreview.innerHTML = createEmptyState('newspaper', 'Aucun article', 'Les actualités apparaîtront ici');
         } else {
-            articlesPreview.innerHTML = allArticles.slice(0, 3).map(a => createArticleCard(a)).join('');
+            articlesPreview.innerHTML = allArticles.slice(0, 3).map((a, i) => createArticleCard(a, false, i)).join('');
         }
     }
 
@@ -441,7 +460,7 @@ function renderArticles(filter = 'all') {
         if (articles.length === 0) {
             articlesList.innerHTML = createEmptyState('newspaper', 'Aucun article', 'Publiez votre premier article ci-dessus');
         } else {
-            articlesList.innerHTML = articles.map(a => createArticleCard(a, true)).join('');
+            articlesList.innerHTML = articles.map((a, i) => createArticleCard(a, true, i)).join('');
         }
     }
 
@@ -469,24 +488,96 @@ function renderArticles(filter = 'all') {
     }
 }
 
-function createArticleCard(article, showDelete = false) {
+// Article media (images and videos)
+const articleMedia = {
+    news: [
+        { type: 'image', url: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80' },
+        { type: 'image', url: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?w=600&q=80' }
+    ],
+    interview: [
+        { type: 'video', url: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80', poster: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80' },
+        { type: 'image', url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80' }
+    ],
+    review: [
+        { type: 'image', url: 'https://images.unsplash.com/photo-1574391884720-bbc3740c59d1?w=600&q=80' },
+        { type: 'video', url: 'https://images.unsplash.com/photo-1571266028243-d8ba36b745?w=600&q=80', poster: 'https://images.unsplash.com/photo-1571266028243-d8ba36b745?w=600&q=80' }
+    ],
+    announcement: [
+        { type: 'image', url: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600&q=80' },
+        { type: 'image', url: 'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&q=80' }
+    ]
+};
+
+function getArticleMedia(category, index) {
+    const media = articleMedia[category] || articleMedia.news;
+    return media[index % media.length];
+}
+
+function getArticleLikes(articleId) {
+    const likes = JSON.parse(localStorage.getItem('montblanc_likes') || '{}');
+    return likes[articleId] || { count: Math.floor(Math.random() * 50) + 10, liked: false };
+}
+
+function toggleArticleLike(articleId) {
+    const likes = JSON.parse(localStorage.getItem('montblanc_likes') || '{}');
+    if (!likes[articleId]) {
+        likes[articleId] = { count: Math.floor(Math.random() * 50) + 10, liked: false };
+    }
+
+    likes[articleId].liked = !likes[articleId].liked;
+    likes[articleId].count += likes[articleId].liked ? 1 : -1;
+
+    localStorage.setItem('montblanc_likes', JSON.stringify(likes));
+
+    // Update UI
+    const btn = document.querySelector(`[data-article-id="${articleId}"]`);
+    if (btn) {
+        btn.classList.toggle('liked', likes[articleId].liked);
+        btn.querySelector('.heart').textContent = likes[articleId].liked ? '❤️' : '🤍';
+        const countEl = btn.previousElementSibling;
+        if (countEl) countEl.textContent = likes[articleId].count;
+    }
+
+    return likes[articleId];
+}
+
+function createArticleCard(article, showDelete = false, index = 0) {
+    const media = article.media || getArticleMedia(article.category, index);
+    const likesData = getArticleLikes(article.id);
+    const isVideo = media.type === 'video';
+
     return `
-        <div class="article-card" data-category="${article.category}">
-            <div class="article-card-image">
-                <span>${getCategoryIcon(article.category)}</span>
+        <div class="article-card-media snow-frame" data-category="${article.category}">
+            <div class="article-media-container">
+                ${isVideo ? `
+                    <img src="${media.poster || media.url}" alt="${escapeHtml(article.title)}" loading="lazy">
+                    <div class="article-video-indicator">▶</div>
+                ` : `
+                    <img src="${media.url}" alt="${escapeHtml(article.title)}" loading="lazy">
+                `}
+                <div class="article-media-overlay"></div>
+                <span class="article-like-count">${likesData.count}</span>
+                <button class="article-like-btn ${likesData.liked ? 'liked' : ''}" data-article-id="${article.id}" onclick="toggleArticleLike(${article.id})">
+                    <span class="heart">${likesData.liked ? '❤️' : '🤍'}</span>
+                </button>
+                <div class="snow-corner snow-corner-tl"></div>
+                <div class="snow-corner snow-corner-tr"></div>
             </div>
-            <div class="article-card-content">
-                <span class="article-category ${article.category}">${getCategoryLabel(article.category)}</span>
-                <h3 class="article-title">${escapeHtml(article.title)}</h3>
-                <p class="article-excerpt">${escapeHtml(truncate(article.content, 100))}</p>
-                <div class="article-footer">
-                    <span class="article-author">Par ${escapeHtml(article.author)}</span>
-                    <span class="article-date">${formatDateShort(article.createdAt)}</span>
+            <div class="article-card-content" style="padding: 1.5rem;">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.75rem;">
+                    <span class="article-category ${article.category}">${getCategoryLabel(article.category)}</span>
+                    ${isVideo ? '<span style="background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 12px; font-size: 0.7rem;">📹 Vidéo</span>' : ''}
                 </div>
-            </div>
-            <div style="padding: 0 1.5rem 1.5rem; display: flex; gap: 0.5rem;">
-                <button class="event-btn event-btn-primary" onclick="showArticleDetails(${article.id})" style="flex: 1;">Lire</button>
-                ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteArticle(${article.id})" style="flex: 0; padding: 0.75rem;">✕</button>` : ''}
+                <h3 class="article-title" style="font-size: 1.3rem; margin-bottom: 0.5rem;">${escapeHtml(article.title)}</h3>
+                <p class="article-excerpt" style="color: rgba(255,255,255,0.6); font-size: 0.85rem; line-height: 1.5; margin-bottom: 1rem;">${escapeHtml(truncate(article.content, 80))}</p>
+                <div class="article-footer" style="display: flex; justify-content: space-between; align-items: center; color: rgba(255,255,255,0.4); font-size: 0.8rem; margin-bottom: 1rem;">
+                    <span>Par ${escapeHtml(article.author)}</span>
+                    <span>${formatDateShort(article.createdAt)}</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button class="event-btn event-btn-primary" onclick="showArticleDetails(${article.id})" style="flex: 1;">${isVideo ? 'Regarder' : 'Lire'}</button>
+                    ${showDelete ? `<button class="event-btn event-btn-delete" onclick="deleteArticle(${article.id})" style="flex: 0; padding: 0.75rem;">✕</button>` : ''}
+                </div>
             </div>
         </div>
     `;
@@ -841,3 +932,5 @@ window.deletePromo = deletePromo;
 window.showEventDetails = showEventDetails;
 window.showArticleDetails = showArticleDetails;
 window.copyPromoCode = copyPromoCode;
+window.toggleArticleLike = toggleArticleLike;
+window.showToast = showToast;
