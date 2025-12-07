@@ -2980,6 +2980,9 @@ body {
 .hero-logo-container {
     position: relative;
     margin-bottom: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .hero-logo-glow {
@@ -3546,25 +3549,140 @@ body {
 }
 
 /* ====================================
-   HERO LOGO FRAME - Snow Effect
+   HERO LOGO FRAME - Champagne Bottle Shape
    ==================================== */
 .hero-logo-frame {
     position: relative;
-    display: inline-block;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 140px;
+    height: 380px;
+    /* Logo as background with gold bottle glass overlay */
+    background:
+        linear-gradient(90deg,
+            rgba(139, 90, 0, 0.5) 0%,
+            rgba(212, 175, 55, 0.3) 15%,
+            rgba(255, 215, 0, 0.15) 50%,
+            rgba(212, 175, 55, 0.3) 85%,
+            rgba(139, 90, 0, 0.5) 100%),
+        url('assets/logo.png');
+    background-size: cover, 120% auto;
+    background-position: center, center 60%;
+    background-repeat: no-repeat, no-repeat;
+    /* Champagne bottle silhouette - classic shape */
+    clip-path: polygon(
+        /* Neck */
+        38% 0%, 62% 0%,
+        62% 10%, 65% 12%,
+        /* Shoulders - curved */
+        72% 15%, 82% 20%, 90% 28%,
+        /* Body */
+        96% 38%, 100% 50%, 100% 92%,
+        /* Bottom */
+        97% 97%, 90% 100%, 10% 100%, 3% 97%,
+        /* Left side */
+        0% 92%, 0% 50%, 4% 38%,
+        /* Left shoulder */
+        10% 28%, 18% 20%, 28% 15%,
+        /* Left neck */
+        35% 12%, 38% 10%
+    );
     box-shadow:
-        0 25px 80px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 30px 60px rgba(0, 0, 0, 0.7),
+        inset 3px 0 25px rgba(255, 255, 255, 0.1),
+        inset -3px 0 25px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
 }
 
+/* Glass reflection - left side highlight */
+.hero-logo-frame::before {
+    content: '';
+    position: absolute;
+    top: 70px;
+    left: 8px;
+    width: 20px;
+    height: 200px;
+    background: linear-gradient(180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.02) 100%);
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Cork/Cap wrapper - using ::after for the red capsule top */
+.hero-logo-frame::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 28px;
+    /* Red capsule with metallic shine */
+    background:
+        /* Highlight reflection */
+        radial-gradient(ellipse 60% 30% at 30% 20%, rgba(255, 255, 255, 0.4) 0%, transparent 50%),
+        /* Main red gradient */
+        linear-gradient(180deg,
+            #ff2d2d 0%,
+            #e31c1c 15%,
+            #cc1414 50%,
+            #a01010 85%,
+            #7a0c0c 100%);
+    border-radius: 6px 6px 4px 4px;
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 150, 150, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 5;
+}
+
+/* Gold muselet/wire cage around neck */
 .hero-logo-frame .hero-logo {
-    width: min(280px, 60vw);
-    display: block;
-    filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.3));
+    /* Hide the img but keep element for potential future use */
+    opacity: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+}
+
+/* Muselet wire cage effect - gold wires */
+.hero-logo-frame .snow-corner-tl,
+.hero-logo-frame .snow-corner-tr,
+.hero-logo-frame .snow-corner-bl,
+.hero-logo-frame .snow-corner-br {
+    display: none;
+}
+
+/* Add gold ring below cap using a wrapper element style */
+.hero-logo-container .hero-logo-frame {
+    /* Add gold ring at neck */
+    border-top: 3px solid transparent;
+    background-clip: padding-box;
+}
+
+/* Gold foil ring at neck - pseudo element on container */
+.hero-logo-container::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 190px + 22px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 8px;
+    background: linear-gradient(180deg,
+        #ffd700 0%,
+        #d4af37 30%,
+        #b8962e 70%,
+        #8b7021 100%);
+    border-radius: 2px;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    z-index: 6;
 }
 
 /* Snow Frame Effect */
