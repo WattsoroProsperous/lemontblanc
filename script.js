@@ -926,6 +926,48 @@ function showToast(message, type = 'success') {
 }
 
 // ====================================
+// BOTTLE CAROUSEL - Auto rotation
+// ====================================
+function initBottleCarousel() {
+    const carousel = document.querySelector('.bottle-carousel');
+    if (!carousel) return;
+
+    const bottles = carousel.querySelectorAll('.hero-logo-frame');
+    if (bottles.length <= 1) return;
+
+    let currentIndex = 0;
+    const intervalTime = 4000; // Change bottle every 4 seconds
+
+    function showNextBottle() {
+        // Mark current as exiting
+        bottles[currentIndex].classList.remove('active');
+        bottles[currentIndex].classList.add('exiting');
+
+        // Move to next bottle
+        currentIndex = (currentIndex + 1) % bottles.length;
+
+        // After a short delay, remove exiting class and show new bottle
+        setTimeout(() => {
+            bottles.forEach((bottle, index) => {
+                bottle.classList.remove('exiting');
+                if (index === currentIndex) {
+                    bottle.classList.add('active');
+                }
+            });
+        }, 400);
+    }
+
+    // Start the carousel
+    setInterval(showNextBottle, intervalTime);
+}
+
+// Initialize carousel when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    // Small delay to ensure CSS is loaded
+    setTimeout(initBottleCarousel, 500);
+});
+
+// ====================================
 // EXPOSER FONCTIONS GLOBALES
 // ====================================
 window.deleteEvent = deleteEvent;

@@ -3549,6 +3549,38 @@ body {
 }
 
 /* ====================================
+   BOTTLE CAROUSEL
+   ==================================== */
+.bottle-carousel {
+    position: relative;
+    width: 120px;
+    height: 420px;
+    perspective: 1000px;
+}
+
+.bottle-carousel .hero-logo-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: rotateY(-90deg) scale(0.8);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.bottle-carousel .hero-logo-frame.active {
+    opacity: 1;
+    transform: rotateY(0deg) scale(1);
+    pointer-events: auto;
+    z-index: 10;
+}
+
+.bottle-carousel .hero-logo-frame.exiting {
+    opacity: 0;
+    transform: rotateY(90deg) scale(0.8);
+}
+
+/* ====================================
    HERO LOGO FRAME - Champagne Bottle Shape
    ==================================== */
 .hero-logo-frame {
@@ -3558,7 +3590,7 @@ body {
     justify-content: center;
     width: 120px;
     height: 420px;
-    /* Logo as background with gold bottle glass overlay */
+    /* Default - Gold bottle */
     background:
         linear-gradient(90deg,
             rgba(139, 90, 0, 0.55) 0%,
@@ -3609,6 +3641,101 @@ body {
         inset 4px 0 30px rgba(255, 255, 255, 0.12),
         inset -4px 0 30px rgba(0, 0, 0, 0.35);
     overflow: hidden;
+}
+
+/* ====================================
+   BOTTLE COLOR VARIANTS
+   ==================================== */
+
+/* Gold Bottle (default) - already styled above */
+.bottle-gold {
+    background:
+        linear-gradient(90deg,
+            rgba(139, 90, 0, 0.55) 0%,
+            rgba(212, 175, 55, 0.35) 12%,
+            rgba(255, 215, 0, 0.15) 50%,
+            rgba(212, 175, 55, 0.35) 88%,
+            rgba(139, 90, 0, 0.55) 100%),
+        url('assets/logo.png') !important;
+    background-size: cover, 150% auto !important;
+    background-position: center, center 60% !important;
+}
+
+/* Rose/Pink Champagne Bottle */
+.bottle-rose {
+    background:
+        linear-gradient(90deg,
+            rgba(139, 50, 70, 0.55) 0%,
+            rgba(219, 112, 147, 0.35) 12%,
+            rgba(255, 182, 193, 0.2) 50%,
+            rgba(219, 112, 147, 0.35) 88%,
+            rgba(139, 50, 70, 0.55) 100%),
+        url('assets/logo.png') !important;
+    background-size: cover, 150% auto !important;
+    background-position: center, center 60% !important;
+}
+
+.bottle-rose::after {
+    background:
+        radial-gradient(ellipse 40% 15% at 30% 8%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+        linear-gradient(180deg,
+            #ff69b4 0%,
+            #db7093 20%,
+            #c71585 40%,
+            #a0295a 60%,
+            #8b1a4a 80%,
+            #6b0f35 100%) !important;
+}
+
+/* Classic Green Champagne Bottle */
+.bottle-green {
+    background:
+        linear-gradient(90deg,
+            rgba(0, 60, 30, 0.6) 0%,
+            rgba(34, 100, 60, 0.4) 12%,
+            rgba(60, 140, 80, 0.25) 50%,
+            rgba(34, 100, 60, 0.4) 88%,
+            rgba(0, 60, 30, 0.6) 100%),
+        url('assets/logo.png') !important;
+    background-size: cover, 150% auto !important;
+    background-position: center, center 60% !important;
+}
+
+.bottle-green::after {
+    background:
+        radial-gradient(ellipse 40% 15% at 30% 8%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+        linear-gradient(180deg,
+            #ffd700 0%,
+            #e6c200 20%,
+            #d4af37 50%,
+            #b8962e 75%,
+            #8b7021 100%) !important;
+}
+
+/* Black Premium Bottle */
+.bottle-black {
+    background:
+        linear-gradient(90deg,
+            rgba(0, 0, 0, 0.8) 0%,
+            rgba(30, 30, 30, 0.5) 12%,
+            rgba(50, 50, 50, 0.3) 50%,
+            rgba(30, 30, 30, 0.5) 88%,
+            rgba(0, 0, 0, 0.8) 100%),
+        url('assets/logo.png') !important;
+    background-size: cover, 150% auto !important;
+    background-position: center, center 60% !important;
+}
+
+.bottle-black::after {
+    background:
+        radial-gradient(ellipse 40% 15% at 30% 8%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
+        linear-gradient(180deg,
+            #c0c0c0 0%,
+            #a0a0a0 20%,
+            #808080 40%,
+            #606060 60%,
+            #404040 80%,
+            #202020 100%) !important;
 }
 
 /* Glass reflection - left side highlight */
@@ -3702,6 +3829,208 @@ body {
         0 2px 4px rgba(0, 0, 0, 0.4),
         inset 0 1px 2px rgba(255, 255, 255, 0.3);
     z-index: 6;
+}
+
+/* Champagne bubbles animation inside bottle */
+.hero-logo-frame .snow-corner-tl,
+.hero-logo-frame .snow-corner-tr {
+    display: block !important;
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0.3) 50%, transparent 70%);
+    border-radius: 50%;
+    animation: bubbleRise 3s ease-in infinite;
+    z-index: 4;
+}
+
+.hero-logo-frame .snow-corner-tl {
+    left: 35%;
+    bottom: 20%;
+    animation-delay: 0s;
+}
+
+.hero-logo-frame .snow-corner-tr {
+    left: 55%;
+    bottom: 15%;
+    animation-delay: 1.5s;
+}
+
+.hero-logo-frame .snow-corner-bl,
+.hero-logo-frame .snow-corner-br {
+    display: block !important;
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, rgba(255, 223, 100, 0.9) 0%, rgba(255, 215, 0, 0.4) 50%, transparent 70%);
+    border-radius: 50%;
+    animation: bubbleRise 4s ease-in infinite;
+    z-index: 4;
+}
+
+.hero-logo-frame .snow-corner-bl {
+    left: 45%;
+    bottom: 25%;
+    animation-delay: 0.7s;
+}
+
+.hero-logo-frame .snow-corner-br {
+    left: 50%;
+    bottom: 30%;
+    animation-delay: 2.2s;
+}
+
+@keyframes bubbleRise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translateY(-280px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+/* Elegant serving tray/plateau under bottle */
+.hero-logo-reflection {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 20px;
+    /* Shiny gold/silver tray */
+    background:
+        /* Top shine */
+        linear-gradient(180deg,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(212, 175, 55, 0.8) 20%,
+            rgba(180, 150, 50, 0.9) 50%,
+            rgba(139, 112, 33, 1) 80%,
+            rgba(100, 80, 20, 1) 100%);
+    border-radius: 50% / 100%;
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.5),
+        0 2px 10px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+/* Tray rim/edge */
+.hero-logo-reflection::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 12px;
+    background:
+        linear-gradient(180deg,
+            rgba(255, 215, 0, 0.9) 0%,
+            rgba(212, 175, 55, 1) 40%,
+            rgba(180, 150, 50, 1) 100%);
+    border-radius: 50% / 100%;
+    box-shadow:
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Decorative ring on tray */
+.hero-logo-reflection::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140px;
+    height: 6px;
+    background:
+        linear-gradient(90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.6) 20%,
+            rgba(255, 255, 255, 0.8) 50%,
+            rgba(255, 255, 255, 0.6) 80%,
+            transparent 100%);
+    border-radius: 50%;
+}
+
+/* Champagne drip animation from bottle */
+.hero-logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px;
+    height: 450px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Champagne drip 1 */
+.hero-logo-glow::before {
+    content: '';
+    position: absolute;
+    top: 75%;
+    left: 30%;
+    width: 3px;
+    height: 0;
+    background: linear-gradient(180deg,
+        rgba(255, 215, 0, 0.8) 0%,
+        rgba(255, 200, 50, 0.6) 50%,
+        rgba(255, 215, 0, 0.2) 100%);
+    border-radius: 0 0 3px 3px;
+    animation: champagneDrip 4s ease-in-out infinite;
+    animation-delay: 1s;
+}
+
+/* Champagne drip 2 */
+.hero-logo-glow::after {
+    content: '';
+    position: absolute;
+    top: 72%;
+    left: 65%;
+    width: 2px;
+    height: 0;
+    background: linear-gradient(180deg,
+        rgba(255, 215, 0, 0.7) 0%,
+        rgba(255, 200, 50, 0.5) 50%,
+        rgba(255, 215, 0, 0.1) 100%);
+    border-radius: 0 0 2px 2px;
+    animation: champagneDrip 5s ease-in-out infinite;
+    animation-delay: 2.5s;
+}
+
+@keyframes champagneDrip {
+    0% {
+        height: 0;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    50% {
+        height: 60px;
+        opacity: 0.7;
+    }
+    80% {
+        height: 80px;
+        opacity: 0.3;
+    }
+    100% {
+        height: 100px;
+        opacity: 0;
+    }
 }
 
 /* Snow Frame Effect */
