@@ -3555,7 +3555,8 @@ body {
     position: relative;
     width: 120px;
     height: 420px;
-    perspective: 1000px;
+    perspective: 1200px;
+    transform-style: preserve-3d;
 }
 
 .bottle-carousel .hero-logo-frame {
@@ -3563,21 +3564,50 @@ body {
     top: 0;
     left: 0;
     opacity: 0;
-    transform: rotateY(-90deg) scale(0.8);
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(0.95);
+    transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
     pointer-events: none;
 }
 
 .bottle-carousel .hero-logo-frame.active {
     opacity: 1;
-    transform: rotateY(0deg) scale(1);
+    transform: scale(1);
     pointer-events: auto;
     z-index: 10;
+    /* Subtle floating animation */
+    animation: bottleFloat 4s ease-in-out infinite;
 }
 
 .bottle-carousel .hero-logo-frame.exiting {
     opacity: 0;
-    transform: rotateY(90deg) scale(0.8);
+    transform: scale(1.05);
+}
+
+/* Floating animation for active bottle */
+@keyframes bottleFloat {
+    0%, 100% {
+        transform: scale(1) translateY(0);
+    }
+    50% {
+        transform: scale(1) translateY(-8px);
+    }
+}
+
+/* Hover effect */
+.bottle-carousel .hero-logo-frame.active:hover {
+    animation-play-state: paused;
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+
+/* Shimmer/shine effect on bottle */
+@keyframes bottleShimmer {
+    0% {
+        background-position: -200% center, center 60%;
+    }
+    100% {
+        background-position: 200% center, center 60%;
+    }
 }
 
 /* ====================================
@@ -3636,11 +3666,51 @@ body {
         /* Left neck up */
         44% 2%
     );
+    /* 3D depth shadows and highlights */
     box-shadow:
-        0 35px 70px rgba(0, 0, 0, 0.6),
-        inset 4px 0 30px rgba(255, 255, 255, 0.12),
-        inset -4px 0 30px rgba(0, 0, 0, 0.35);
+        /* Main drop shadow */
+        0 40px 80px rgba(0, 0, 0, 0.5),
+        0 20px 40px rgba(0, 0, 0, 0.3),
+        /* Left edge highlight (light source) */
+        inset 8px 0 40px rgba(255, 255, 255, 0.15),
+        inset 3px 0 15px rgba(255, 255, 255, 0.2),
+        /* Right edge shadow (depth) */
+        inset -8px 0 40px rgba(0, 0, 0, 0.4),
+        inset -3px 0 15px rgba(0, 0, 0, 0.3),
+        /* Top highlight */
+        inset 0 10px 30px rgba(255, 255, 255, 0.08),
+        /* Bottom shadow */
+        inset 0 -20px 40px rgba(0, 0, 0, 0.25);
     overflow: hidden;
+    /* 3D transform for depth */
+    transform-style: preserve-3d;
+}
+
+/* 3D highlight stripe on bottle */
+.hero-logo-frame::before {
+    content: '';
+    position: absolute;
+    top: 100px;
+    left: 15%;
+    width: 8px;
+    height: 250px;
+    background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.25) 10%,
+        rgba(255, 255, 255, 0.35) 30%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0.15) 70%,
+        transparent 100%);
+    border-radius: 50%;
+    filter: blur(2px);
+    pointer-events: none;
+    z-index: 10;
+    transform: translateZ(5px);
+}
+
+/* Secondary highlight for more 3D effect */
+.bottle-carousel .hero-logo-frame.active::after {
+    filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.4));
 }
 
 /* ====================================
@@ -3738,51 +3808,30 @@ body {
             #202020 100%) !important;
 }
 
-/* Glass reflection - left side highlight */
-.hero-logo-frame::before {
-    content: '';
-    position: absolute;
-    top: 140px;
-    left: 8px;
-    width: 14px;
-    height: 200px;
-    background: linear-gradient(180deg,
-        rgba(255, 255, 255, 0.2) 0%,
-        rgba(255, 255, 255, 0.1) 40%,
-        rgba(255, 255, 255, 0.02) 100%);
-    border-radius: 8px;
-    pointer-events: none;
-    z-index: 3;
-}
-
 /* Gold foil cap - like real champagne */
 .hero-logo-frame::after {
     content: '';
     position: absolute;
-    top: -5px;
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 18px;
-    height: 85px;
-    /* Gold foil wrapping the top */
+    width: 14px;
+    height: 10px;
+    /* Realistic champagne capsule */
     background:
-        /* Highlight reflection */
-        radial-gradient(ellipse 40% 15% at 30% 8%, rgba(255, 255, 255, 0.6) 0%, transparent 70%),
-        /* Textured gold foil gradient */
+        /* Top dome highlight */
+        radial-gradient(ellipse 80% 50% at 50% 20%, rgba(255, 255, 255, 0.7) 0%, transparent 50%),
+        /* Gold foil capsule */
         linear-gradient(180deg,
             #ffd700 0%,
-            #e6c200 8%,
-            #d4af37 20%,
-            #c9a227 35%,
-            #b8962e 50%,
-            #a6851f 65%,
-            #8b7021 80%,
-            #7a6018 100%);
+            #f0c800 30%,
+            #d4af37 70%,
+            #b8962e 100%);
     border-radius: 4px 4px 2px 2px;
     box-shadow:
-        0 5px 15px rgba(0, 0, 0, 0.4),
-        inset 2px 0 4px rgba(255, 255, 255, 0.3),
-        inset -2px 0 4px rgba(0, 0, 0, 0.2);
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 2px 0 2px rgba(255, 255, 255, 0.5),
+        inset -2px 0 2px rgba(0, 0, 0, 0.2);
     z-index: 5;
 }
 
@@ -3810,26 +3859,6 @@ body {
     background-clip: padding-box;
 }
 
-/* Gold collar ring at neck - pseudo element on container */
-.hero-logo-container::after {
-    content: '';
-    position: absolute;
-    top: calc(50% - 210px + 80px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: 20px;
-    height: 12px;
-    background: linear-gradient(180deg,
-        #ffd700 0%,
-        #d4af37 30%,
-        #b8962e 70%,
-        #8b7021 100%);
-    border-radius: 3px;
-    box-shadow:
-        0 2px 4px rgba(0, 0, 0, 0.4),
-        inset 0 1px 2px rgba(255, 255, 255, 0.3);
-    z-index: 6;
-}
 
 /* Champagne bubbles animation inside bottle */
 .hero-logo-frame .snow-corner-tl,
