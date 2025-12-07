@@ -759,9 +759,11 @@ function closeModal() {
 // ====================================
 function loadContent() {
     // Load demo content first time
-    if (!localStorage.getItem('montblanc_demo_v2')) {
+    if (!localStorage.getItem('montblanc_demo_v3')) {
+        // Clear old data and reload with FCFA prices
+        localStorage.removeItem('montblanc_events');
         loadDemoContent();
-        localStorage.setItem('montblanc_demo_v2', 'true');
+        localStorage.setItem('montblanc_demo_v3', 'true');
     }
 
     renderEvents();
@@ -778,7 +780,7 @@ function loadDemoContent() {
             time: '23:00',
             description: 'Une soirée électro exceptionnelle avec les meilleurs DJs de la région. Système son dernière génération, light show spectaculaire et ambiance garantie jusqu\'au bout de la nuit. Dress code : élégant.',
             dj: 'DJ STORM & LUNA',
-            price: '15€ (gratuit avant minuit)',
+            price: '5 000 FCFA (gratuit avant minuit)',
             createdAt: new Date().toISOString()
         },
         {
@@ -788,7 +790,7 @@ function loadDemoContent() {
             time: '22:00',
             description: 'Tout le monde en blanc pour cette soirée exceptionnelle. Cocktails spéciaux, photographe officiel et surprises toute la nuit. La soirée incontournable de la saison.',
             dj: 'RESIDENT DJS',
-            price: '10€',
+            price: '3 000 FCFA',
             createdAt: new Date().toISOString()
         }
     ];
