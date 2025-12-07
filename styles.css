@@ -346,6 +346,7 @@ body {
     text-align: center;
     z-index: 10;
     padding: 2rem;
+    padding-top: 100px;
 }
 
 .hero-logo {
